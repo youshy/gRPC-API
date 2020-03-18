@@ -27,7 +27,7 @@ func main() {
 		Multiply(c, 25, 246524)
 		Substract(c, 234542, 534)
 	*/
-	PrimeNumberStream(c, 1200)
+	PrimeNumberStream(c, 12390392840)
 }
 
 // Unary
