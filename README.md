@@ -22,3 +22,10 @@ how to make an API with gRPC
     sudo chown -R [user] /usr/local/include/google
     ```
     (or run `./proto.sh` and change your user)
+
+* Install Go depedencies:
+
+`go get -u google.golang.org/grpc`
+`go get -u github.com/golang/protobuf/protoc-gen-go`
+
+(added both to `./go-proto.sh`)
