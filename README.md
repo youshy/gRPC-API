@@ -29,3 +29,5 @@ how to make an API with gRPC
 `go get -u github.com/golang/protobuf/protoc-gen-go`
 
 (added both to `./go-proto.sh`)
+
+* Generate code: `protoc <file_name> --go_out=plugins=grpc:.`
