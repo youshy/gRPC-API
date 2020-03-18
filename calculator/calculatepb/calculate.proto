@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package calculate;
+option go_package="calculatepb";
+
+message Calculate {
+  int64 first_number = 1;
+  int64 second_number = 2;
+}
+
+message CalculateRequest {
+  Calculate calculate = 1;
+}
+
+message CalculateResponse {
+  int64 result = 1;
+}
+
+service CalculateService{
+  // Unary
+  rpc CalculateSum(CalculateRequest) returns (CalculateResponse) {};
+  rpc CalculateSubstract(CalculateRequest) returns (CalculateResponse) {};
+  rpc CalculateMultiply(CalculateRequest) returns (CalculateResponse) {};
+  rpc CalculateDivision(CalculateRequest) returns (CalculateResponse) {};
+}
