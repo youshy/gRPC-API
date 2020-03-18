@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/youshy/gRPC-API/greet/greetpb"
@@ -18,5 +19,23 @@ func main() {
 	defer conn.Close()
 
 	c := greetpb.NewGreetServiceClient(conn)
-	log.Printf("Created client %f\n", c)
+
+	doUnary(c)
+}
+
+func doUnary(c greetpb.GreetServiceClient) {
+	req := &greetpb.GreetRequest{
+		Greeting: &greetpb.Greeting{
+			FirstName: "Artur",
+			LastName:  "Kondas",
+		},
+	}
+
+	ctx := context.Background()
+
+	res, err := c.Greet(ctx, req)
+	if err != nil {
+		log.Fatalf("error calling Greet RPC %v\n", err)
+	}
+	log.Printf("Response from greet: %v\n", res.Result)
 }
