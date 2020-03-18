@@ -55,6 +55,25 @@ func (*server) CalculateDivision(ctx context.Context, req *calculatepb.Calculate
 	return res, nil
 }
 
+func (*server) PrimeNumberDecompose(req *calculatepb.PrimeNumberRequest, stream calculatepb.CalculateService_PrimeNumberDecomposeServer) error {
+	log.Printf("Prime number decompose with %v\n", req)
+	number := req.GetPrimenumber().GetNumber()
+	k := int64(2)
+	for number > 1 {
+		if number%k == 0 {
+			res := &calculatepb.PrimeNumberResponse{
+				Result: k,
+			}
+			stream.Send(res)
+			number = number / k
+		} else {
+			k = k + 1
+		}
+	}
+
+	return nil
+}
+
 func main() {
 	log.Printf("Hello!\nThis is calculate grpc\n")
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")

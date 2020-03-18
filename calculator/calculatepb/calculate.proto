@@ -16,10 +16,25 @@ message CalculateResponse {
   int64 result = 1;
 }
 
+message PrimeNumber {
+  int64 number = 1;
+}
+
+message PrimeNumberRequest {
+  PrimeNumber primenumber = 1;
+}
+
+message PrimeNumberResponse {
+  int64 result = 1;
+}
+
 service CalculateService{
   // Unary
   rpc CalculateSum(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateSubstract(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateMultiply(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateDivision(CalculateRequest) returns (CalculateResponse) {};
+
+  // ServerStream
+  rpc PrimeNumberDecompose(PrimeNumberRequest) returns (stream PrimeNumberResponse) {};
 }
