@@ -71,7 +71,6 @@ func (*server) PrimeNumberDecompose(req *calculatepb.PrimeNumberRequest, stream 
 			k = k + 1
 		}
 	}
-
 	return nil
 }
 
@@ -98,7 +97,28 @@ func (*server) CalculateAverage(stream calculatepb.CalculateService_CalculateAve
 		res += number
 		ele += 1
 	}
+}
 
+func (*server) FindMaximum(stream calculatepb.CalculateService_FindMaximumServer) error {
+	log.Printf("FindMaximum invoked\n")
+	var maximum int64
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatalf("error while reading stream %v\n")
+		}
+		number := req.GetNumber()
+		if number > maximum {
+			maximum = number
+			stream.Send(&calculatepb.FindMaximumResponse{
+				Maximum: maximum,
+			})
+		}
+	}
 }
 
 func main() {

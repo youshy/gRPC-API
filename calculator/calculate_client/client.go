@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"time"
 
 	"github.com/youshy/gRPC-API/calculator/calculatepb"
 	"google.golang.org/grpc"
@@ -30,7 +31,9 @@ func main() {
 
 	// PrimeNumberStream(c, 12390392840)
 
-	StreamCalcuateAverage(c)
+	//	StreamCalcuateAverage(c)
+
+	BiDiFindMaximumStream(c)
 }
 
 // Unary
@@ -167,5 +170,49 @@ func StreamCalcuateAverage(c calculatepb.CalculateServiceClient) {
 	}
 
 	log.Printf("CalculateAverage response: %v\n", res)
+}
+
+// BiDi Stream
+func BiDiFindMaximumStream(c calculatepb.CalculateServiceClient) {
+	ctx := context.Background()
+
+	stream, err := c.FindMaximum(ctx)
+
+	if err != nil {
+		log.Fatalf("error while opening stream and calling FindMaximum %v\n", err)
+	}
+
+	waitc := make(chan struct{})
+
+	// send go routine
+	go func() {
+		numbers := []int64{2, 4, 6, 8, 1, 5, 94, 1, 435, 444, 432, 605}
+		for _, number := range numbers {
+			req := &calculatepb.FindMaximumRequest{
+				Number: number,
+			}
+			stream.Send(req)
+			time.Sleep(time.Second)
+		}
+		stream.CloseSend()
+	}()
+	// receive go routine
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("problem while reading the server stream %v\n", err)
+				break
+			}
+			maximum := res.GetMaximum()
+			log.Printf("Received a new maximum of %v\n", maximum)
+		}
+		close(waitc)
+	}()
+
+	<-waitc
 
 }

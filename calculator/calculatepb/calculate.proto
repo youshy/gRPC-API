@@ -36,6 +36,14 @@ message CalculateAverageResponse {
   float result = 1;
 }
 
+message FindMaximumRequest {
+  int64 number = 1;
+}
+
+message FindMaximumResponse {
+  int64 maximum = 1;
+}
+
 service CalculateService{
   // Unary
   rpc CalculateSum(CalculateRequest) returns (CalculateResponse) {};
@@ -48,4 +56,7 @@ service CalculateService{
 
   // ClientStream
   rpc CalculateAverage(stream CalculateAverageRequest) returns (CalculateAverageResponse) {};
+
+  // BiDirectionalStream
+  rpc FindMaximum(stream FindMaximumRequest) returns (stream FindMaximumResponse) {};
 }
