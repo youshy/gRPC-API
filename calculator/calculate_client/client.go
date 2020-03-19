@@ -27,7 +27,10 @@ func main() {
 		Multiply(c, 25, 246524)
 		Substract(c, 234542, 534)
 	*/
-	PrimeNumberStream(c, 12390392840)
+
+	// PrimeNumberStream(c, 12390392840)
+
+	StreamCalcuateAverage(c)
 }
 
 // Unary
@@ -99,7 +102,7 @@ func Substract(c calculatepb.CalculateServiceClient, first, second int64) {
 	log.Printf("Substract: %v\n", res.Result)
 }
 
-// Stream
+// Server stream
 func PrimeNumberStream(c calculatepb.CalculateServiceClient, number int64) {
 	ctx := context.Background()
 
@@ -124,5 +127,45 @@ func PrimeNumberStream(c calculatepb.CalculateServiceClient, number int64) {
 		}
 		log.Printf("Res: %v\n", msg.GetResult())
 	}
+}
+
+// Client stream
+func StreamCalcuateAverage(c calculatepb.CalculateServiceClient) {
+	ctx := context.Background()
+
+	requests := []*calculatepb.CalculateAverageRequest{
+		&calculatepb.CalculateAverageRequest{
+			Number: 3,
+		},
+		&calculatepb.CalculateAverageRequest{
+			Number: 6,
+		},
+		&calculatepb.CalculateAverageRequest{
+			Number: 32,
+		},
+		&calculatepb.CalculateAverageRequest{
+			Number: 2,
+		},
+		&calculatepb.CalculateAverageRequest{
+			Number: 67,
+		},
+	}
+
+	stream, err := c.CalculateAverage(ctx)
+	if err != nil {
+		log.Fatalf("error while calling CalculateAverage %v\n", err)
+	}
+
+	for iter, req := range requests {
+		log.Printf("Sending chunk no %v\tCalculating %v\n", iter, req)
+		stream.Send(req)
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("error while receiving response from CalculateAverage %v\n", err)
+	}
+
+	log.Printf("CalculateAverage response: %v\n", res)
 
 }
