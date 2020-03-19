@@ -171,14 +171,15 @@ func doBiDiStreaming(c greetpb.GreetServiceClient) {
 		for {
 			res, err := stream.Recv()
 			if err == io.EOF {
-				close(waitc)
+				break
 			}
 			if err != nil {
 				log.Fatalf("Error while receiving %v\n", err)
-				close(waitc)
+				break
 			}
 			log.Printf("Received %v\n", res.GetResult())
 		}
+		close(waitc)
 	}()
 	<-waitc
 }
