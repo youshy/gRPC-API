@@ -147,7 +147,7 @@ func StreamCalcuateAverage(c calculatepb.CalculateServiceClient) {
 			Number: 2,
 		},
 		&calculatepb.CalculateAverageRequest{
-			Number: 67,
+			Number: 69,
 		},
 	}
 
