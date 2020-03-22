@@ -31,3 +31,7 @@ how to make an API with gRPC
 (added both to `./go-proto.sh`)
 
 * Generate code: `protoc <file_name> --go_out=plugins=grpc:.`
+
+## Interesting stuff
+
+* More information about error codes - [here](https://grpc.io/docs/guides/error/) and [here](http://avi.im/grpc-errors/#go)

@@ -44,12 +44,21 @@ message FindMaximumResponse {
   int64 maximum = 1;
 }
 
+message SquareRootRequest {
+  int64 number = 1;
+}
+
+message SquareRootResponse {
+  float root = 1;
+}
+
 service CalculateService{
   // Unary
   rpc CalculateSum(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateSubstract(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateMultiply(CalculateRequest) returns (CalculateResponse) {};
   rpc CalculateDivision(CalculateRequest) returns (CalculateResponse) {};
+  rpc SquareRoot(SquareRootRequest) returns (SquareRootResponse) {};
 
   // ServerStream
   rpc PrimeNumberDecompose(PrimeNumberRequest) returns (stream PrimeNumberResponse) {};

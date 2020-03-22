@@ -2,12 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
+	"math"
 	"net"
 
 	"github.com/youshy/gRPC-API/calculator/calculatepb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct{}
@@ -119,6 +123,17 @@ func (*server) FindMaximum(stream calculatepb.CalculateService_FindMaximumServer
 			})
 		}
 	}
+}
+
+func (*server) SquareRoot(ctx context.Context, req *calculatepb.SquareRootRequest) (*calculatepb.SquareRootResponse, error) {
+	log.Printf("SquareRoot invoked\n")
+	number := req.GetNumber()
+	if number < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Received a negative number %v", number))
+	}
+	return &calculatepb.SquareRootResponse{
+		Root: float32(math.Sqrt(float64(number))),
+	}, nil
 }
 
 func main() {

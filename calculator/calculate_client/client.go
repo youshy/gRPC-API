@@ -31,9 +31,10 @@ func main() {
 
 	// PrimeNumberStream(c, 12390392840)
 
-	//	StreamCalcuateAverage(c)
+	// StreamCalcuateAverage(c)
 
-	BiDiFindMaximumStream(c)
+	// BiDiFindMaximumStream(c)
+
 }
 
 // Unary
